@@ -4,9 +4,12 @@ const core = require("@actions/core");
 const fs = require("fs");
 
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
-const FILE_PATH = core.getInput("image_path") || "./assets/tryhackme-badge.png";
+const FILE_PATH = core.getInput("image_path") || "./assets/thm_badge.png";
 const THM_USERNAME = core.getInput("username") || "dhanushnehru";
 const THM_USER_ID = core.getInput("user_id") || "1995656";
+const COMMITER_USERNAME = core.getInput("committer_username") || "github-actions[bot]";
+const COMMITER_EMAIL = core.getInput("committer_email") || "github-actions[bot]@users.noreply.github.com";
+const COMMIT_MESSAGE = core.getInput("commit_message") || "Updated THM profile badge using action workflow by Dhanush Nehru";
 
 /*
  * Executes a command and returns its result as promise
@@ -49,9 +52,9 @@ const executeCommand = (cmd, args = [], options = {}) =>
 
 core.setSecret(GITHUB_TOKEN);
 
-const refreshBadge = async (userId) => {
+const refreshBadge = async (userId, username) => {
   try {
-    const res = await axios.get(`https://tryhackme.com/badge/regen/${userId}`);
+    const res = await axios.put(`https://tryhackme.com/api/v2/badges/public-profile/image`, {username: username, userPublicId: userId});
     if (res.status >= 400) {
       throw new Error("Badge update failed");
     }
@@ -61,13 +64,11 @@ const refreshBadge = async (userId) => {
   }
 };
 
-const downloadAndCommitBadge = async (githubToken, filePath, username) => {
-  await refreshBadge(THM_USER_ID);
+const downloadAndCommitBadge = async (githubToken, filePath, userId, username, committerUsername, commiterEmail, commitMessage) => {
+  await refreshBadge(userId, username);
   try {
     const url = `https://tryhackme-badges.s3.amazonaws.com/${username}.png`;
     const path = filePath;
-    const committerUsername = core.getInput("committer_username");
-    const commitMessage = core.getInput("commit_message") || "Updated THM profile badge using action workflow by Dhanush Nehru";
 
     const res = await axios({
       url,
@@ -83,6 +84,7 @@ const downloadAndCommitBadge = async (githubToken, filePath, username) => {
     });
 
     await executeCommand("git", ["config", "--global", "user.name", committerUsername]);
+    await executeCommand("git", ["config", "--global", "user.email", commiterEmail]);
     if (githubToken) {
       await executeCommand("git", [
         "remote",
@@ -101,4 +103,4 @@ const downloadAndCommitBadge = async (githubToken, filePath, username) => {
   }
 };
 
-downloadAndCommitBadge(GITHUB_TOKEN, FILE_PATH, THM_USERNAME);
+downloadAndCommitBadge(GITHUB_TOKEN, FILE_PATH, THM_USER_ID, THM_USERNAME, COMMITER_USERNAME, COMMITER_EMAIL, COMMIT_MESSAGE);
