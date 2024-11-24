@@ -4,7 +4,7 @@ const core = require("@actions/core");
 const fs = require("fs");
 
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
-const FILE_PATH = core.getInput("image_path") || "./assets/thm_badge.png";
+const FILE_PATH = core.getInput("image_path") || "./assets/tryhackme-badge.png";
 const THM_USERNAME = core.getInput("username") || "dhanushnehru";
 const THM_USER_ID = core.getInput("user_id") || "1995656";
 const COMMITER_USERNAME = core.getInput("committer_username") || "github-actions[bot]";
@@ -54,7 +54,8 @@ core.setSecret(GITHUB_TOKEN);
 
 const refreshBadge = async (userId, username) => {
   try {
-    const res = await axios.put(`https://tryhackme.com/api/v2/badges/public-profile/image`, {username: username, userPublicId: userId});
+    const res = await axios.put('https://tryhackme.com/api/v2/badges/public-profile/image', {username: username, userPublicId: userId});
+    
     if (res.status >= 400) {
       throw new Error("Badge update failed");
     }

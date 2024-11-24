@@ -1,19 +1,22 @@
 {
-  "name": "tryhackme-badge-action-workflow",
-  "version": "1.0",
-  "description": "A simple github action to retrieve tryhackme static badge image and display it on your profile README",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ncc build index.js -o dist"
-  },
-  "author": "Dhanush Nehru",
-  "license": "ISC",
-  "dependencies": {
-    "@actions/core": "^1.10.1",
-    "@actions/github": "^6.0.0",
-    "axios": "^1.7.3",
-    "ncc": "^0.3.6",
-    "node-fetch": "^3.3.2"
-  }
+    "name": "tryhackme-badge-action-workflow",
+    "version": "1.0",
+    "description": "A simple github action to retrieve tryhackme static badge image and display it on your profile README",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "ncc build index.js -o dist"
+    },
+    "author": "Dhanush Nehru",
+    "license": "ISC",
+    "dependencies": {
+        "@actions/core": "^1.10.1",
+        "@actions/github": "^6.0.0",
+        "axios": "^1.7.3",
+        "ncc": "^0.2.0",
+        "node-fetch": "^3.3.2"
+    },
+    "devDependencies": {
+        "@vercel/ncc": "^0.38.3"
+    }
 }

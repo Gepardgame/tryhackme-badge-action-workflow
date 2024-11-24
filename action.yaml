@@ -17,6 +17,9 @@ inputs:
     description: "Your GitHub username"
     default: "dhanushnehru"
     required: false
+  committer_email:
+    description: "Your GitHub Email"
+    required: false
   commit_message:
     description: "Commit message"
     default: "Updated THM profile badge"
